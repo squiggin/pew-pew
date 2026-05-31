@@ -14,7 +14,7 @@ public sealed class World
 
     public Dictionary<int, Entity> entities = new();
 
-    public Dictionary<int, Vec2Int> positions = new();
+    public Dictionary<int, Vector2> positions = new();
     public Dictionary<int, Vec2Int> dimensions = new();
     public Dictionary<int, Texture2D> textures = new();
     public Dictionary<int, Vector2> velocities = new();

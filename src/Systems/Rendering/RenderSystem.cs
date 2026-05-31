@@ -20,8 +20,17 @@ public class RenderSystem
                 continue;
             }
 
-            var destination = new Rectangle(position.X, position.Y, dimensions.X, dimensions.Y);
+            var destination = new Rectangle(
+                (int)position.X,
+                (int)position.Y,
+                dimensions.X,
+                dimensions.Y
+            );
             batch.Draw(texture, destination, null, Color.White);
+
+            var dummyTexture = new Texture2D(batch.GraphicsDevice, 1, 1);
+            dummyTexture.SetData(new[] { Color.White });
+            batch.Draw(dummyTexture, destination, Color.Red);
         }
 
         batch.End();

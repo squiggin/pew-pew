@@ -6,10 +6,14 @@ public class EventCleanupSystem
 {
     public void Update(World world)
     {
-        foreach (var (entityId, _) in world.collisionEvents)
+        foreach (var entityId in world.collisionEvents.Keys.ToList())
         {
             world.collisionEvents.Remove(entityId);
-            world.DeleteEntity(world.entities[entityId]);
+
+            if (world.entities.TryGetValue(entityId, out var entity))
+            {
+                world.DeleteEntity(entity);
+            }
         }
     }
 }

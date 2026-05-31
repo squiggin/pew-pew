@@ -39,8 +39,8 @@ public class CollisionDetectionSystem
                 }
 
                 CheckBoxBoxCollision(
-                    new Rectangle(positionA.X, positionA.Y, dimensionsA.X, dimensionsA.Y),
-                    new Rectangle(positionB.X, positionB.Y, dimensionsB.X, dimensionsB.Y),
+                    new Rectangle((int)positionA.X, (int)positionA.Y, dimensionsA.X, dimensionsA.Y),
+                    new Rectangle((int)positionB.X, (int)positionB.Y, dimensionsB.X, dimensionsB.Y),
                     out var isCollision,
                     out var normal,
                     out var penetration

@@ -1,5 +1,4 @@
 using forest_keeper.Entities;
-using forest_keeper.Utils;
 using Microsoft.Xna.Framework;
 
 namespace forest_keeper.Systems;
@@ -8,42 +7,7 @@ public class MovementSystem
 {
     public void Update(World world, GameTime gameTime)
     {
-        foreach (var (_, collisionEvent) in world.collisionEvents)
-        {
-            if (
-                world.velocities.TryGetValue(collisionEvent.entityA.Id, out var velocityA)
-                && world.positions.TryGetValue(collisionEvent.entityA.Id, out var positionA)
-            )
-            {
-                if (velocityA is not { X: 0, Y: 0 })
-                {
-                    world.positions[collisionEvent.entityA.Id] =
-                        positionA
-                        - Vec2Int.FromVector2(collisionEvent.normal * collisionEvent.penetration);
-                    world.velocities[collisionEvent.entityA.Id] = Vector2.Reflect(
-                        velocityA,
-                        -collisionEvent.normal
-                    );
-                }
-            }
-
-            if (
-                world.velocities.TryGetValue(collisionEvent.entityB.Id, out var velocityB)
-                && world.positions.TryGetValue(collisionEvent.entityB.Id, out var positionB)
-            )
-            {
-                if (velocityB is not { X: 0, Y: 0 })
-                {
-                    world.positions[collisionEvent.entityB.Id] =
-                        positionB
-                        + Vec2Int.FromVector2(collisionEvent.normal * collisionEvent.penetration);
-                    world.velocities[collisionEvent.entityB.Id] = Vector2.Reflect(
-                        velocityB,
-                        collisionEvent.normal
-                    );
-                }
-            }
-        }
+        HandleCollisions(world);
 
         foreach (var (entityId, velocity) in world.velocities)
         {
@@ -53,11 +17,72 @@ public class MovementSystem
             }
 
             var delta = velocity * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100;
-            world.positions[entityId] += new Vec2Int
+            world.positions[entityId] += delta;
+        }
+    }
+
+    private void HandleCollisions(World world)
+    {
+        foreach (var (_, collisionEvent) in world.collisionEvents)
+        {
+            var hasAVelocity = world.velocities.TryGetValue(
+                collisionEvent.entityA.Id,
+                out var velocityA
+            );
+            var hasAPosition = world.positions.TryGetValue(
+                collisionEvent.entityA.Id,
+                out var positionA
+            );
+            var hasA = hasAVelocity && hasAPosition;
+
+            var hasBVelocity = world.velocities.TryGetValue(
+                collisionEvent.entityB.Id,
+                out var velocityB
+            );
+            var hasBPosition = world.positions.TryGetValue(
+                collisionEvent.entityB.Id,
+                out var positionB
+            );
+            var hasB = hasBVelocity && hasBPosition;
+
+            if (!hasA && !hasB)
             {
-                X = (int)MathF.Round(delta.X),
-                Y = (int)MathF.Round(delta.Y),
-            };
+                continue;
+            }
+
+            var dynamicA = hasA && velocityA is not { X: 0, Y: 0 };
+            var dynamicB = hasB && velocityB is not { X: 0, Y: 0 };
+            var separation = collisionEvent.normal * collisionEvent.penetration;
+
+            if (dynamicA && dynamicB)
+            {
+                world.positions[collisionEvent.entityA.Id] = positionA - separation / 2f;
+                world.positions[collisionEvent.entityB.Id] = positionB + separation / 2f;
+            }
+            else if (dynamicA)
+            {
+                world.positions[collisionEvent.entityA.Id] = positionA - separation;
+            }
+            else if (dynamicB)
+            {
+                world.positions[collisionEvent.entityB.Id] = positionB + separation;
+            }
+
+            if (dynamicA)
+            {
+                world.velocities[collisionEvent.entityA.Id] = Vector2.Reflect(
+                    velocityA,
+                    -collisionEvent.normal
+                );
+            }
+
+            if (dynamicB)
+            {
+                world.velocities[collisionEvent.entityB.Id] = Vector2.Reflect(
+                    velocityB,
+                    collisionEvent.normal
+                );
+            }
         }
     }
 }

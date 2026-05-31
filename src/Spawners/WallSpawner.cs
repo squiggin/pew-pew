@@ -10,13 +10,13 @@ public class WallSpawner
 {
     public static void Spawn(World world)
     {
-        WallSpawner.CreateWall(world, new Vec2Int(-1, 0), new Vec2Int(1, world.height));
-        WallSpawner.CreateWall(world, new Vec2Int(0, 0), new Vec2Int(world.width, 1));
-        WallSpawner.CreateWall(world, new Vec2Int(world.width, 0), new Vec2Int(1, world.height));
-        WallSpawner.CreateWall(world, new Vec2Int(0, world.height), new Vec2Int(world.width, 1));
+        WallSpawner.CreateWall(world, new Vector2(-1, 0), new Vec2Int(1, world.height));
+        WallSpawner.CreateWall(world, new Vector2(0, 0), new Vec2Int(world.width, 1));
+        WallSpawner.CreateWall(world, new Vector2(world.width, 0), new Vec2Int(1, world.height));
+        WallSpawner.CreateWall(world, new Vector2(0, world.height), new Vec2Int(world.width, 1));
     }
 
-    private static void CreateWall(World world, Vec2Int position, Vec2Int dimensions)
+    private static void CreateWall(World world, Vector2 position, Vec2Int dimensions)
     {
         var entity = world.CreateEntity();
         world.positions.Add(entity.Id, position);
