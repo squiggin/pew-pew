@@ -18,8 +18,11 @@ class Game : Microsoft.Xna.Framework.Game
     // private Texture2D? texture;
     private Assets assets;
     private World world;
+    private CollisionDetectionSystem collisionDetectionSystem;
+    private EventCleanupSystem eventCleanupSystem;
     private RenderSystem renderSystem;
     private MovementSystem movementSystem;
+    
 
     [STAThread]
     static void Main(string[] args)
@@ -35,8 +38,8 @@ class Game : Microsoft.Xna.Framework.Game
         this.frames = 0;
 
         GraphicsDeviceManager gdm = new GraphicsDeviceManager(this);
-        gdm.PreferredBackBufferWidth = 1280;
-        gdm.PreferredBackBufferHeight = 720;
+        gdm.PreferredBackBufferWidth = WIDTH;
+        gdm.PreferredBackBufferHeight = HEIGHT;
         gdm.IsFullScreen = false;
         gdm.SynchronizeWithVerticalRetrace = true;
 
@@ -44,9 +47,11 @@ class Game : Microsoft.Xna.Framework.Game
         Content.RootDirectory = "Content";
 
         assets = new Assets();
-        world =  new World();
-        renderSystem = new RenderSystem();
+        world =  new World(WIDTH, HEIGHT);
+        collisionDetectionSystem = new CollisionDetectionSystem();
         movementSystem = new MovementSystem();
+        renderSystem = new RenderSystem();
+        eventCleanupSystem = new EventCleanupSystem();
     }
 
     protected override void Initialize()
@@ -64,6 +69,7 @@ class Game : Microsoft.Xna.Framework.Game
         batch = new SpriteBatch(GraphicsDevice);
         assets.LoadContent(Content);
         
+        WallSpawner.Spawn(world);
         BallSpawner.Spawn(world, assets);
     }
 
@@ -83,7 +89,9 @@ class Game : Microsoft.Xna.Framework.Game
         // Run game logic in here. Do NOT render anything here!
         base.Update(gameTime);
         
+        collisionDetectionSystem.Update(world);
         movementSystem.Update(world, gameTime);
+        eventCleanupSystem.Update(world);
     }
 
     protected override void Draw(GameTime gameTime)
