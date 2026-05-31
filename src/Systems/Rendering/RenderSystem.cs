@@ -12,8 +12,10 @@ public class RenderSystem
 
         foreach (var (entityId, position) in world.positions)
         {
-            if (!world.textures.TryGetValue(entityId, out var texture) ||
-                !world.dimensions.TryGetValue(entityId, out var dimensions))
+            if (
+                !world.textures.TryGetValue(entityId, out var texture)
+                || !world.dimensions.TryGetValue(entityId, out var dimensions)
+            )
             {
                 continue;
             }

@@ -7,5 +7,5 @@ public struct Collider
 
 public enum ColliderType
 {
-    Box
+    Box,
 }

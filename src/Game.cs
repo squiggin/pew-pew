@@ -7,7 +7,6 @@ using forest_keeper.Systems.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 class Game : Microsoft.Xna.Framework.Game
 {
     const int WIDTH = 1280;
@@ -15,6 +14,7 @@ class Game : Microsoft.Xna.Framework.Game
 
     private int frames;
     private SpriteBatch? batch;
+
     // private Texture2D? texture;
     private Assets assets;
     private World world;
@@ -22,7 +22,6 @@ class Game : Microsoft.Xna.Framework.Game
     private EventCleanupSystem eventCleanupSystem;
     private RenderSystem renderSystem;
     private MovementSystem movementSystem;
-    
 
     [STAThread]
     static void Main(string[] args)
@@ -47,7 +46,7 @@ class Game : Microsoft.Xna.Framework.Game
         Content.RootDirectory = "Content";
 
         assets = new Assets();
-        world =  new World(WIDTH, HEIGHT);
+        world = new World(WIDTH, HEIGHT);
         collisionDetectionSystem = new CollisionDetectionSystem();
         movementSystem = new MovementSystem();
         renderSystem = new RenderSystem();
@@ -68,7 +67,7 @@ class Game : Microsoft.Xna.Framework.Game
         // Create the batch...
         batch = new SpriteBatch(GraphicsDevice);
         assets.LoadContent(Content);
-        
+
         WallSpawner.Spawn(world);
         BallSpawner.Spawn(world, assets);
     }
@@ -88,7 +87,7 @@ class Game : Microsoft.Xna.Framework.Game
     {
         // Run game logic in here. Do NOT render anything here!
         base.Update(gameTime);
-        
+
         collisionDetectionSystem.Update(world);
         movementSystem.Update(world, gameTime);
         eventCleanupSystem.Update(world);
@@ -101,7 +100,6 @@ class Game : Microsoft.Xna.Framework.Game
 
         if (batch != null)
         {
-            
             // var destination = new Rectangle(WIDTH / 2, HEIGHT / 2, texture!.Width, texture.Height);
             // var rotation = (float) gameTime.TotalGameTime.TotalMilliseconds / 150;
             // var rotationOrigin = new Vector2(texture.Width / 2, texture.Height / 2);

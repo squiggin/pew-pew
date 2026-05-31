@@ -11,10 +11,17 @@ public class BallDuplicationSystem
     {
         foreach (var (_, collisionEvent) in world.collisionEvents)
         {
-            if (world.balls.ContainsKey(collisionEvent.entityA.Id) &&
-                world.balls.ContainsKey(collisionEvent.entityB.Id))
+            if (
+                world.balls.ContainsKey(collisionEvent.entityA.Id)
+                && world.balls.ContainsKey(collisionEvent.entityB.Id)
+            )
             {
-                BallSpawner.CreateBall(world, new Vec2Int(0, world.height/2), new Vector2(15, 15), assets.Trumpet);
+                BallSpawner.CreateBall(
+                    world,
+                    new Vec2Int(0, world.height / 2),
+                    new Vector2(15, 15),
+                    assets.Trumpet
+                );
             }
         }
     }

@@ -11,7 +11,7 @@ public sealed class World
 {
     public int width;
     public int height;
-    
+
     public Dictionary<int, Entity> entities = new();
 
     public Dictionary<int, Vec2Int> positions = new();
@@ -35,13 +35,14 @@ public sealed class World
 
     public Entity CreateEntity()
     {
-        var entity = freeEntityIDs.Count > 0
-            ? new Entity { Id = freeEntityIDs.Pop() }
-            : new Entity { Id = nextEntityId++ };
+        var entity =
+            freeEntityIDs.Count > 0
+                ? new Entity { Id = freeEntityIDs.Pop() }
+                : new Entity { Id = nextEntityId++ };
         entities.Add(entity.Id, entity);
         return entity;
     }
-    
+
     public void DeleteEntity(Entity entity)
     {
         positions.Remove(entity.Id);
@@ -50,7 +51,7 @@ public sealed class World
         textures.Remove(entity.Id);
         balls.Remove(entity.Id);
         walls.Remove(entity.Id);
-        
+
         entities.Remove(entity.Id);
         freeEntityIDs.Push(entity.Id);
     }

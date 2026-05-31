@@ -13,27 +13,38 @@ public class CollisionDetectionSystem
         for (int i = 0; i < colliderEntities.Count; i++)
         {
             var entityIdA = colliderEntities[i];
-            if (!(world.positions.TryGetValue(entityIdA, out var positionA) &&
-                  world.dimensions.TryGetValue(entityIdA, out var dimensionsA)))
+            if (
+                !(
+                    world.positions.TryGetValue(entityIdA, out var positionA)
+                    && world.dimensions.TryGetValue(entityIdA, out var dimensionsA)
+                )
+            )
             {
                 continue;
             }
 
-            for (int j = i+1; j < colliderEntities.Count; j++)
+            for (int j = i + 1; j < colliderEntities.Count; j++)
             {
                 var entityIdB = colliderEntities[j];
-                
-                if (entityIdA == entityIdB ||
-                    !(world.positions.TryGetValue(entityIdB, out var positionB) &&
-                      world.dimensions.TryGetValue(entityIdB, out var dimensionsB))
-                   )
+
+                if (
+                    entityIdA == entityIdB
+                    || !(
+                        world.positions.TryGetValue(entityIdB, out var positionB)
+                        && world.dimensions.TryGetValue(entityIdB, out var dimensionsB)
+                    )
+                )
                 {
                     continue;
                 }
 
-                CheckBoxBoxCollision(new Rectangle(positionA.X, positionA.Y, dimensionsA.X, dimensionsA.Y),
-                    new Rectangle(positionB.X, positionB.Y, dimensionsB.X, dimensionsB.Y), out var isCollision,
-                    out var normal, out var penetration);
+                CheckBoxBoxCollision(
+                    new Rectangle(positionA.X, positionA.Y, dimensionsA.X, dimensionsA.Y),
+                    new Rectangle(positionB.X, positionB.Y, dimensionsB.X, dimensionsB.Y),
+                    out var isCollision,
+                    out var normal,
+                    out var penetration
+                );
 
                 if (isCollision && normal.HasValue && penetration.HasValue)
                 {
@@ -42,8 +53,10 @@ public class CollisionDetectionSystem
                         collisionEventEntity.Id,
                         new CollisionEvent
                         {
-                            entityA = world.entities[entityIdA], entityB = world.entities[entityIdB],
-                            normal = normal.Value, penetration = penetration.Value
+                            entityA = world.entities[entityIdA],
+                            entityB = world.entities[entityIdB],
+                            normal = normal.Value,
+                            penetration = penetration.Value,
                         }
                     );
                 }
@@ -51,8 +64,13 @@ public class CollisionDetectionSystem
         }
     }
 
-    private static void CheckBoxBoxCollision(Rectangle boxA, Rectangle boxB, out bool isCollision, out Vector2? normal,
-        out float? penetration)
+    private static void CheckBoxBoxCollision(
+        Rectangle boxA,
+        Rectangle boxB,
+        out bool isCollision,
+        out Vector2? normal,
+        out float? penetration
+    )
     {
         if (!boxA.Intersects(boxB))
         {

@@ -1,4 +1,3 @@
 namespace forest_keeper.Components.Tags;
 
-public struct Ball
-{}
+public struct Ball { }

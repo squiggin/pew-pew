@@ -12,8 +12,8 @@ public struct CollisionEvent
 
     public override string ToString()
     {
-        return $"{{Entities: {entityA.Id}, {entityB.Id}, " +
-               $"Normal: {normal.ToString()}, " +
-               $"Penetration: {penetration.ToString()}";
+        return $"{{Entities: {entityA.Id}, {entityB.Id}, "
+            + $"Normal: {normal.ToString()}, "
+            + $"Penetration: {penetration.ToString()}";
     }
 }

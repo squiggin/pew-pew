@@ -8,7 +8,6 @@ namespace forest_keeper.Spawners;
 
 public class WallSpawner
 {
-    
     public static void Spawn(World world)
     {
         WallSpawner.CreateWall(world, new Vec2Int(-1, 0), new Vec2Int(1, world.height));
